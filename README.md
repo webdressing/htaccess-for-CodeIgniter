@@ -30,7 +30,7 @@ might not work instantly on your server. The worst thing that can happen is a mi
 - Adding sufix to your URL
 - Loop protection
 - Redirect Examples
-- Fix Bad value X-UA-Compatible (http://www.validatethis.co.uk/news/fix-bad-value-x-ua-compatible-once-and-for-all/)
+- Fix Bad value X-UA-Compatible [info...](http://www.validatethis.co.uk/news/fix-bad-value-x-ua-compatible-once-and-for-all/)
 - tbc.
 
 
