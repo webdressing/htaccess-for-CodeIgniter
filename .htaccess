@@ -1,0 +1,161 @@
+
+#
+# http://www.farinspace.com/codeigniter-htaccess-file/
+# ciHTACCESS, by Mario "Kuroir" Ricalde
+# http://www.askapache.com
+# http://www.webdressing.de
+#
+
+<IfModule mod_rewrite.c>
+
+    RewriteEngine On
+    RewriteBase /
+
+
+    #
+    # Force www in URL
+    #
+
+    	RewriteCond %{HTTP_HOST} ^mydomain\.de
+		RewriteRule ^(.*)$ http://www.mydomain.de/$1 [R=301,L]
+
+
+	#
+	# Enforce NO www
+	#
+	
+		#RewriteCond %{HTTP_HOST} ^www [NC]
+		#RewriteRule ^(.*)$ http://domain.tld/$1 [L,R=301]
+   
+
+    #
+    # Canonicalize codeigniter URLs
+    # If your default controller is something other than "welcome" you should probably change this
+ 	#
+
+    	RewriteRule ^(welcome(/index)?|index(\.php)?)/?$ / [L,R=301]
+    	RewriteRule ^(.*)/index/?$ $1 [L,R=301]
+
+ 
+ 	#
+    # Removes trailing slashes to prevent SEO duplicate content issues
+    #
+
+    	RewriteCond %{REQUEST_FILENAME} !-d
+    	RewriteRule ^(.+)/$ $1 [L,R=301]
+
+
+    # 
+	# Removes access to the system and application folder by users.
+	#
+
+		RewriteCond %{REQUEST_URI} ^system.*
+		RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+		RewriteCond %{REQUEST_URI} ^application.*
+		RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+
+    #
+    # Grant access to the the following files
+    #
+
+    	RewriteCond $1 !^(index\.php|assets|files|favicon\.ico|favicon\.png|robots\.txt|sitemap\.xml)
+
+
+	#
+    # Checks to see if the user is attempting to access a valid file, such as an image or a document.
+    # All other requests will be forwarded to our index.php
+    #
+
+    	#RewriteCond %{REQUEST_FILENAME} !-f
+    	#RewriteCond %{REQUEST_FILENAME} !-d
+    	#RewriteRule ^(.*)(/+)$ $1 [L,R=301]
+
+
+	#
+	# Remove /index/ segment on the URL.
+	#
+
+		#RewriteRule ^(.*)/index/? $1 [L,R=301]
+
+
+	#
+	# Remove Multiple slashes in betweeen
+	#
+
+		#RewriteCond %{REQUEST_URI} ^(.*)//(.*)$
+		#RewriteRule . %1/%2 [R=301,L]
+
+
+	#
+	# Add the file sufix (sufix can also be set on config/config.php)
+	#
+
+		#RewriteCond %{REQUEST_FILENAME} !-f
+		#RewriteCond %{REQUEST_FILENAME} !-d
+		#RewriteCond %{REQUEST_URI} !\.html
+		#RewriteRule ^(.*)/(.+)$ $1/$2\.html [L,R=301]
+
+
+	#
+	# Remove any slash before .html ( to prevent site/.html )
+	#
+
+		#RewriteCond %{REQUEST_URI} \/+\.html$ [NC]
+		#RewriteRule ^(.+)\/+\.html$ $1\.html [L,R=301]
+
+
+	#
+	# Send everything to index.php
+	#
+
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule ^(.*)$ index.php/$1
+	
+
+    #
+    # Internal Redirect Loop Protection
+    #
+
+		RewriteCond %{ENV:REDIRECT_STATUS} 200
+		RewriteRule ^ - [L]
+
+
+	#
+	# Permanent redirects (301) of old pages, to avoid antiquated and/or wrong links
+	#
+
+		Redirect 301 http://www.mypage.de/index.html http://www.mypage.de/de/willkommen.html
+		Redirect 301 http://www.mypage.de/en/page/Privacy_Information http://www.mypage.de/en/Privacy_Information.html
+		Redirect 301 en/page/Legal_Disclosure http://www.webdressing.de/en/Legal_Disclosure.html
+
+	
+</IfModule>
+
+
+
+<IfModule !mod_rewrite.c>
+
+	#
+    # If we don't have mod_rewrite installed, all 404's can be sent to index.php
+    #
+
+    	ErrorDocument 404 /index.php
+
+</IfModule>
+
+
+
+#
+# Fix Bad value X-UA-Compatible - http://www.validatethis.co.uk/news/fix-bad-value-x-ua-compatible-once-and-for-all/
+#
+
+<FilesMatch "\.(htm|html|php)$">
+    <IfModule mod_headers.c>
+        BrowserMatch MSIE ie
+        Header set X-UA-Compatible "IE=Edge,chrome=1" env=ie
+    </IfModule>
+</FilesMatch>
+        
