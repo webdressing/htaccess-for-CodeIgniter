@@ -34,11 +34,6 @@ might not work instantly on your server. The worst thing that can happen is a mi
 - tbc.
 
 
-## Documentation
-
--
-
-
 ## Changes / Modifications
 
 -
